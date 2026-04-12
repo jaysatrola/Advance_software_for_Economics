@@ -1,0 +1,11 @@
+import pandas as pd
+stocks = pd.read_csv('/Users/jaysatrola/Desktop/Spring 2026/Advance Software for Economics /Term project/SP500.min.2023Jan.bars.csv',parse_dates=True,index_col=0)
+stocks['ticker'] = stocks['ticker'].astype('category')
+print(stocks.columns)
+filtered_cat = stocks[['close', 'ticker']].copy()
+filtered_cat = filtered_cat[filtered_cat['ticker'] == 'CAT']
+filtered_cat = filtered_cat['close'].resample('D').last()
+filtered_cat = filtered_cat.astype(object)
+filtered_cat.fillna('Market Close', inplace=True)
+print(filtered_cat.head(10))
+filtered_cat.to_csv('cat_closing_prices2.txt', header=True)

@@ -1,0 +1,52 @@
+import pandas as pd
+cat_stocks = pd.read_csv('/Users/jaysatrola/Desktop/Spring 2026/Advance Software for Economics /Term project/cat_closing_prices2.txt', index_col=0, parse_dates=True)
+cat_stocks['close'] = pd.to_numeric(cat_stocks['close'], errors='coerce')
+cat_stocks = cat_stocks.dropna()
+cat_stocks = cat_stocks.reset_index(drop=True)  # ← add this line
+cat_stock = cat_stocks['close']
+
+temp_date = None
+temp_buy = float('Inf')
+sell_price = 0
+buy_price = 0
+buy_date = None
+sell_date = None
+
+for key, value in cat_stock.items():  # now key is 0,1,2,3...
+    if value < temp_buy:
+        temp_buy = value
+        temp_date = key
+    profit = value - temp_buy
+    if profit > (sell_price - buy_price):
+        sell_price = value
+        sell_date = key
+        buy_price = temp_buy
+        buy_date = temp_date
+
+if buy_date and sell_date:
+    print(f"\nBuy at {buy_price} on Day {buy_date + 1}, sell at {sell_price} on Day {sell_date + 1}")
+else:
+    print("No profitable opportunity found.")
+
+print(f"\nMaximum profit: buy at ${buy_price} on Day {buy_date + 1}, sell at ${sell_price} on Day {sell_date + 1}")
+
+# Graph
+import matplotlib.pyplot as plt
+
+graph = cat_stocks['close']
+
+plt.figure(figsize=(12, 6))
+plt.plot(graph.index + 1, graph.values, label='CAT Closing Price', color='blue', linewidth=1)
+
+plt.scatter(buy_date + 1, buy_price, color='green', zorder=5, s=100, label=f'Buy: ${buy_price:.2f}')
+plt.scatter(sell_date + 1, sell_price, color='red', zorder=5, s=100, label=f'Sell: ${sell_price:.2f}')
+
+plt.title('CAT Stock Closing Prices')
+plt.xlabel('Trading Day')
+plt.ylabel('Closing Price ($)')
+plt.xticks(range(1, len(graph) + 1))
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.savefig('Graph.png')
+plt.show()

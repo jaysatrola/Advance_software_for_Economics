@@ -1,0 +1,28 @@
+import pandas as pd
+cat_stocks = pd.read_csv('/Users/jaysatrola/Desktop/Spring 2026/Advance Software for Economics /Term project/cat_closing_prices2.txt', index_col=0, parse_dates=True)
+cat_stocks['close'] = pd.to_numeric(cat_stocks['close'], errors='coerce')
+cat_stocks = cat_stocks.dropna()
+cat_stocks["close"] = cat_stocks["close"].astype(float)
+cat_stock = cat_stocks['close']
+
+temp_date = None
+temp_buy = float('Inf')
+sell_price = 0
+buy_price =0
+buy_date = None
+sell_date = None
+for key,value in cat_stock.items():
+    if value < temp_buy:
+        temp_buy = value
+        temp_date = key
+    profit = value - temp_buy
+    if profit> (sell_price - buy_price):
+        sell_price = value
+        sell_date = key
+        buy_price = temp_buy
+        buy_date = temp_date
+if buy_date and sell_date:
+    print(f"\nBuy at {buy_price} on {buy_date}, sell at {sell_price} on {sell_date}")
+else:
+    print("No profitable opportunity found.")
+print(f"\nMaximum profit can be made while buying the stock at {buy_price} on {buy_date} and selling the stock at {sell_price} on {sell_date}")

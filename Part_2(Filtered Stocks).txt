@@ -1,0 +1,8 @@
+import pandas as pd
+cat_stocks = pd.read_csv('/Users/jaysatrola/Desktop/Spring 2026/Advance Software for Economics /Term project/cat_closing_prices2.txt')
+
+cat_stocks['close'] = pd.to_numeric(cat_stocks['close'], errors='coerce')
+cat_stocks = cat_stocks.dropna()
+cat_stocks["close"] = cat_stocks["close"].astype(float)
+print(f'\nCAT STOCKS Mean: {cat_stocks['close'].mean():2f}')
+print(f'\nCAT STOCKS Standard Deviation: {cat_stocks['close'].std():2f}')
