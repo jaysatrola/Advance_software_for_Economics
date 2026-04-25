@@ -2,6 +2,7 @@ import pandas as pd
 cat_stocks = pd.read_csv('/Users/jaysatrola/Desktop/Spring 2026/Advance Software for Economics /Term project/cat_closing_prices2.txt', index_col=0, parse_dates=True)
 cat_stocks['close'] = pd.to_numeric(cat_stocks['close'], errors='coerce')
 cat_stocks = cat_stocks.dropna()
+cat_stocks = cat_stocks[cat_stocks.index.month == 1]
 cat_stocks = cat_stocks.reset_index(drop=True)  # ← add this line
 cat_stock = cat_stocks['close']
 
